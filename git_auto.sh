@@ -138,13 +138,13 @@ function obtenerClone
 
 ## Menú de opciones
 opt=""
-while [ "$opt" != "5" ]
+while [ "$opt" != "0" ]
 do
 	echo 1- Crear nuevo repositorio en Github
 	echo 2- Crear nuevo trabajo de repositorio en local y subir a servidor Github
 	echo 3- Subir archivos o modificaciones de local a servidor Github
 	echo 4- Obtener una copia de un repositorio existente en Github y no en tu equipo
-	echo 5- Salir
+	echo 0- Salir
 	echo
 	read -p "Selecciona una opción: " opt
 	clear
@@ -156,7 +156,7 @@ do
 		subirPush
 	elif [ "$opt" = "4" ]; then
 		obtenerClone
-	elif [ "$opt" = "5" ]; then
+	elif [ "$opt" = "0" ]; then
 		break
 	else
 		echo "Escoge una opción correcta"

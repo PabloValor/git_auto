@@ -25,6 +25,15 @@ if [ ! -x /usr/bin/curl ]; then
 	echo "Paquete \"curl\" instalado correctamente"
     sleep 4 && clear
 fi
+
+if [ ! -x /usr/bin/xclip ]; then
+    echo "No tienes instalado el paquete \"xclip\", vamos a instalarlo"
+    sudo pacman -Sy --noconfirm xclip
+	clear
+	echo ""
+	echo "Paquete \"xclip\" instalado correctamente"
+    sleep 4 && clear
+fi
 clear
 
 ## Comprobamos si tenemos el usuario y correo configurados
@@ -136,6 +145,28 @@ function obtenerClone
 	fi
 }
 
+## Obtener key ssh y explicación de como insertar en la página de Github
+function obtenerkey
+{
+	echo "En esta opción vamos a crear la ssh key para luego ingresarla en el servidor Github"
+	echo "y de esta forma poder trabajar sin problemas con nuestros repositorios"
+	echo ""
+	echo "De momento no he conseguido introducir la clave automáticamente por comandos, por"
+	echo "lo que después de generada la deberemos pegar manualmente como explico a continuación"
+	echo ""
+	echo ""
+	echo "Escribe la contraseña de tu Github (esto es por si quieres activar la doble seguridad del servidor):"
+	echo "En caso de no querer la doble seguridad, puedes dejar el espacio de contraseña en blanco"
+	read sshpass
+	echo ""
+	echo "Se creará en $HOME/.ssh/ y el archivo se llamará id_rsa.pub con la contraseña $sshpass"
+	pause
+	ssh-keygen -t rsa -N "$sshpass" -f $HOME/.ssh/id_rsa -C "$useremail"
+	cat $HOME/.ssh/id_rsa.pub | xclip -selection clipboard
+	clear
+
+}
+
 ## Menú de opciones
 opt=""
 while [ "$opt" != "0" ]
@@ -144,6 +175,7 @@ do
 	echo 2- Crear nuevo trabajo de repositorio en local y subir a servidor Github
 	echo 3- Subir archivos o modificaciones de local a servidor Github
 	echo 4- Obtener una copia de un repositorio existente en Github y no en tu equipo
+	echo 5- Obtener key \ssh y explicación de como insertar en la página de Github
 	echo 0- Salir
 	echo
 	read -p "Selecciona una opción: " opt
@@ -156,6 +188,8 @@ do
 		subirPush
 	elif [ "$opt" = "4" ]; then
 		obtenerClone
+	elif [ "$opt" = "5" ]; then
+		obtenerkey
 	elif [ "$opt" = "0" ]; then
 		break
 	else

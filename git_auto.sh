@@ -25,6 +25,15 @@ if [ ! -x /usr/bin/curl ]; then
 	echo "Paquete \"curl\" instalado correctamente"
     sleep 4 && clear
 fi
+
+if [ ! -x /usr/bin/xclip ]; then
+    echo "No tienes instalado el paquete \"xclip\", vamos a instalarlo"
+    sudo pacman -Sy --noconfirm xclip
+	clear
+	echo ""
+	echo "Paquete \"xclip\" instalado correctamente"
+    sleep 4 && clear
+fi
 clear
 
 ## Comprobamos si tenemos el usuario y correo configurados
@@ -143,11 +152,17 @@ function obtenerkey
 	echo "y de esta forma poder trabajar sin problemas con nuestros repositorios"
 	echo ""
 	echo ""
-	echo "Escribe la contraseña de tu Github:"
-	read sshpass
-	echo ""
-	echo "Se creará en $HOME/.ssh/ y el archivo se llamará id_rsa.pub"
-	pause
+	unset sshpass
+	prompt="Escribe la contraseña de tu Github:"
+	while IFS= read -p "$prompt" -r -s -n 1 char
+	do
+		if [[ $char == $'\0' ]]
+		then
+			break
+		fi
+	prompt='*'
+	sshpass+="$char"
+	done
 	ssh-keygen -t rsa -N "$sshpass" -f ~/.ssh/id_rsa -C "$useremail"
 	expect << EOF
 		spawn ssh-add $HOME/.ssh/id_rsa
@@ -160,7 +175,7 @@ EOF
 	echo "Ahora escribe un título o descripción corta para identificar la key en tu servidor"
 	read titulo
 	keyssh=$(cat ~/.ssh/id_rsa.pub)
-	curl -u "$username" --data '{"title":"'"$titulo"'","key":"'"$keyssh"'"}' https://api.github.com/user/keys
+	curl -u "$username:$sshpass" --data '{"title":"'"$titulo"'","key":"'"$keyssh"'"}' https://api.github.com/user/keys
 	clear
 
 }

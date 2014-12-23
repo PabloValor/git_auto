@@ -25,15 +25,6 @@ if [ ! -x /usr/bin/curl ]; then
 	echo "Paquete \"curl\" instalado correctamente"
     sleep 4 && clear
 fi
-
-if [ ! -x /usr/bin/xclip ]; then
-    echo "No tienes instalado el paquete \"xclip\", vamos a instalarlo"
-    sudo pacman -Sy --noconfirm xclip
-	clear
-	echo ""
-	echo "Paquete \"xclip\" instalado correctamente"
-    sleep 4 && clear
-fi
 clear
 
 ## Comprobamos si tenemos el usuario y correo configurados

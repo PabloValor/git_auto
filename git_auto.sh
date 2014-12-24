@@ -57,7 +57,18 @@ function nuevoGithub
 	echo "El nuevo repositorio se llamará: \"$repo\""
 	pause
 	echo ""
-	curl -u "$username" https://api.github.com/user/repos -d '{"name":"'$repo'"}' 
+	unset newpass
+	prompt="Escribe la contraseña de tu Github:"
+	while IFS= read -p "$prompt" -r -s -n 1 char
+	do
+		if [[ $char == $'\0' ]]
+		then
+			break
+		fi
+	prompt='*'
+	newpass+="$char"
+	done
+	curl -u "$username:$newpass" https://api.github.com/user/repos -d '{"name":"'$repo'"}' 
 	sleep 3 && clear
 }
 
@@ -83,7 +94,8 @@ function nuevoLocal
 	clear
 	echo "Escribe una breve descripción del nuevo repositorio: "
 	read descRepo
-	mkdir $HOME/Repos/$nombreRepo && cd $HOME/Repos/$nombreRepo
+	mkdir $HOME/Repos/$nombreRepo
+	cd $HOME/Repos/$nombreRepo
 	touch README.md
 	git init
 	git remote add origin git@github.com:$username/$nombreRepo.git

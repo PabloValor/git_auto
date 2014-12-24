@@ -25,6 +25,15 @@ if [ ! -x /usr/bin/curl ]; then
 	echo "Paquete \"curl\" instalado correctamente"
     sleep 4 && clear
 fi
+
+if [ ! -x /usr/bin/ssh ]; then
+    echo "No tienes instalado el paquete \"openssh\", vamos a instalarlo"
+    sudo pacman -Sy --noconfirm openssh
+	clear
+	echo ""
+	echo "Paquete \"openssh\" instalado correctamente"
+    sleep 4 && clear
+fi
 clear
 
 ## Comprobamos si tenemos el usuario y correo configurados

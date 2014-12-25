@@ -192,15 +192,78 @@ EOF
 
 }
 
+## Modificar usuario y correo de Git (equipo local)
+function modmailusuario
+{
+	echo""
+	echo "Introduce un nuevo correo del usuario:"
+	read noumailname
+	git config --global user.email $noumailname
+	echo -e "Tu nuevo correo electrónico es: $noumailname\n"
+}
+
+function modnomusuario
+{
+	echo""
+	echo "Introduce un nuevo nombre de usuario:"
+	read nouusername
+	git config --global user.name $nouusername
+	echo -e "Tu nuevo nombre de usuario es: $nouusername\n"
+	pause
+}
+
+function modusuariosi
+{
+	clear
+	while true; do
+		read -p "Quieres modificar el nombre de usuario $username? [s/N]: " sn
+		case $sn in
+		[Ss]* ) modnomusuario; break;;
+		[Nn]* ) echo -e "El nombre de usuario no se modificará.\n"; break ;;
+		* ) echo "Por favor, responde si o no.";;
+		esac
+	done
+	while true; do
+		echo -e "\nCorreo actual: $useremail"
+		read -p "¿Quieres modificar el correo del usuario $username? [s/N]: " sn
+		case $sn in
+		[Ss]* ) modmailusuario; break;;
+		[Nn]* ) echo -e "El correo del usuario no se modificará.\n"; break ;;
+		* ) echo "Por favor, responde si o no.";;
+		esac
+	done
+	echo "Para que funcione el script con la nueva configuración de usuario debe cerrarlo y abrir de nuevo"
+	echo -e "Se cerrará automáticamente después de pulsar una tecla.\n"
+	pause
+	exit
+}
+
+function modusuario
+{
+	echo "Esta es la configuración de tu usario y Git de tu equipo local:"
+	git config --list
+	echo ""
+	while true; do
+		read -p "¿Quieres modificar tu usuario y o correo? [s/N]: " sn
+		case $sn in
+		[Ss]* ) modusuariosi; break;;
+		[Nn]* ) echo -e "\n No se modificará nada."; break ;;
+		* ) echo "Por favor, responde si o no.";;
+		esac
+	done
+	pause && clear
+}
+
 ## Menú de opciones
 opt=""
 while [ "$opt" != "0" ]
 do
-	echo 1- Crear nuevo repositorio en Github
+	echo 1- Crear nuevo repositorio en servidor Github
 	echo 2- Crear nuevo trabajo de repositorio en local y subir a servidor Github
 	echo 3- Subir archivos o modificaciones de local a servidor Github
 	echo 4- Obtener una copia de un repositorio existente en Github y no en tu equipo
 	echo 5- Obtener key \ssh e insertarla en el servidor Github
+	echo 6- Modificar usuario y correo de Git \(equipo local\)
 	echo 0- Salir
 	echo
 	read -p "Selecciona una opción: " opt
@@ -215,6 +278,8 @@ do
 		obtenerClone
 	elif [ "$opt" = "5" ]; then
 		obtenerkey
+	elif [ "$opt" = "6" ]; then
+		modusuario
 	elif [ "$opt" = "0" ]; then
 		break
 	else

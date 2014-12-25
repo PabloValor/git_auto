@@ -2,6 +2,23 @@
 
 printf "\e[8;30;100;t" && clear
 
+## Variables
+CABEZERA1="####################################################################"
+CABEZERA2="##                                                                ##"
+CABEZERA3="##  Vamos a crear un nuevo repositorio en el servidor de Github.  ##"
+CABEZERA4="##     En nuestro equipo local no se modificará ni creará nada    ##"
+CABEZERA5="##   Vamos a subir las modificaciones hechas en tu equipo local   ##"
+CABEZERA6="##                    a tu servidor de Github                     ##"
+CABEZERA7="##   Vamos a obtener un repositorio de tu servidor Github que     ##"
+CABEZERA8="##                  no tienes en tu equipo local                  ##"
+CABEZERA9="## Vamos a crear la ssh key para luego ingresarla en el servidor  ##"
+CABEZERA10="##       Github y poder trabajar con nuestros repositorios        ##"
+CABEZERA11="##        Vamos a modificar tu usuario y  tu correo de Git        ##"
+CABEZERA12="##                      de tu equipo local                        ##"
+AZUL='\e[0;34m'
+NARANJA='\e[0;33m'
+NC='\e[0m'
+
 function pause(){
    read -p "Presione una tecla para continuar..."
 }
@@ -60,6 +77,15 @@ clear
 ## Crear nuevo repositorio en Github
 function nuevoGithub
 {
+	echo ""
+	echo ""
+	printf "${NARANJA} %*s\n" $(((${#CABEZERA1}+100)/2)) "$CABEZERA1"
+	printf "${NARANJA} %*s\n" $(((${#CABEZERA2}+100)/2)) "$CABEZERA2"
+	printf "${NARANJA} %*s\n" $(((${#CABEZERA3}+100)/2)) "$CABEZERA3"
+	printf "${NARANJA} %*s\n" $(((${#CABEZERA4}+104)/2)) "$CABEZERA4"
+	printf "${NARANJA} %*s\n" $(((${#CABEZERA2}+100)/2)) "$CABEZERA2"
+	printf "${NARANJA} %*s\n" $(((${#CABEZERA1}+100)/2)) "$CABEZERA1"
+	echo -e "${NC}"
 	echo "Vamos a escoger un nombre para el nuevo repositorio: "
 	read repo
 	clear
@@ -86,11 +112,12 @@ function nuevoLocal
 {
 	clear
 	echo ""
-	echo "##############################################################################################"
+	echo -e "${NARANJA}##############################################################################################"
 	echo "##   Se va a crear una carpeta donde se guardarán todos nuestos proyectos de repositorios   ##"
 	echo "##                  Esta carpeta se llamará Repos y estará en nuestra home                  ##"
 	echo "##            En caso de existir dicha carpeta se ignorará el paso y no se creará           ##"
 	echo "##############################################################################################"
+	echo -e "${NC}"
 	echo ""
 	pause
 	## Comprobamos si tenemos el directorio de Repos, de lo contrario lo crea
@@ -117,6 +144,17 @@ function nuevoLocal
 ## Subir archivos o modificaciones de local a servidor Github
 function subirPush
 {
+	echo ""
+	echo ""
+	printf "${NARANJA} %*s\n" $(((${#CABEZERA1}+100)/2)) "$CABEZERA1"
+	printf "${NARANJA} %*s\n" $(((${#CABEZERA2}+100)/2)) "$CABEZERA2"
+	printf "${NARANJA} %*s\n" $(((${#CABEZERA5}+100)/2)) "$CABEZERA5"
+	printf "${NARANJA} %*s\n" $(((${#CABEZERA6}+100)/2)) "$CABEZERA6"
+	printf "${NARANJA} %*s\n" $(((${#CABEZERA2}+100)/2)) "$CABEZERA2"
+	printf "${NARANJA} %*s\n" $(((${#CABEZERA1}+100)/2)) "$CABEZERA1"
+	echo -e "${NC}"
+	echo ""
+	sleep 3
 	echo "Este es un listado de tus repositorios en local:"
 	cd $HOME/Repos && ls -d */ | sed 's/.$//'
 	echo ""
@@ -139,6 +177,17 @@ function subirPush
 ## Obtener una copia de un repositorio existente en Github y no en tu equipo
 function obtenerClone
 {
+	echo ""
+	echo ""
+	printf "${NARANJA} %*s\n" $(((${#CABEZERA1}+100)/2)) "$CABEZERA1"
+	printf "${NARANJA} %*s\n" $(((${#CABEZERA2}+100)/2)) "$CABEZERA2"
+	printf "${NARANJA} %*s\n" $(((${#CABEZERA7}+100)/2)) "$CABEZERA7"
+	printf "${NARANJA} %*s\n" $(((${#CABEZERA8}+100)/2)) "$CABEZERA8"
+	printf "${NARANJA} %*s\n" $(((${#CABEZERA2}+100)/2)) "$CABEZERA2"
+	printf "${NARANJA} %*s\n" $(((${#CABEZERA1}+100)/2)) "$CABEZERA1"
+	echo -e "${NC}"
+	echo ""
+	sleep 3
 	echo "Este es un listado de tus repositorios en el servidor:"
 	curl https://api.github.com/users/$username/repos -s | grep git_url | cut -d"/" -f5 | sed 's/......$//'
 	echo ""
@@ -160,10 +209,17 @@ function obtenerClone
 ## Obtener key ssh e insertarla en el servidor Github
 function obtenerkey
 {
-	echo "En esta opción vamos a crear la ssh key para luego ingresarla en el servidor Github"
-	echo "y de esta forma poder trabajar sin problemas con nuestros repositorios"
 	echo ""
 	echo ""
+	printf "${NARANJA} %*s\n" $(((${#CABEZERA1}+100)/2)) "$CABEZERA1"
+	printf "${NARANJA} %*s\n" $(((${#CABEZERA2}+100)/2)) "$CABEZERA2"
+	printf "${NARANJA} %*s\n" $(((${#CABEZERA9}+100)/2)) "$CABEZERA9"
+	printf "${NARANJA} %*s\n" $(((${#CABEZERA10}+100)/2)) "$CABEZERA10"
+	printf "${NARANJA} %*s\n" $(((${#CABEZERA2}+100)/2)) "$CABEZERA2"
+	printf "${NARANJA} %*s\n" $(((${#CABEZERA1}+100)/2)) "$CABEZERA1"
+	echo -e "${NC}"
+	echo ""
+	sleep 3
 	unset sshpass
 	prompt="Escribe la contraseña de tu Github:"
 	while IFS= read -p "$prompt" -r -s -n 1 char
@@ -240,6 +296,17 @@ function modusuariosi
 
 function modusuario
 {
+	echo ""
+	echo ""
+	printf "${NARANJA} %*s\n" $(((${#CABEZERA1}+100)/2)) "$CABEZERA1"
+	printf "${NARANJA} %*s\n" $(((${#CABEZERA2}+100)/2)) "$CABEZERA2"
+	printf "${NARANJA} %*s\n" $(((${#CABEZERA11}+100)/2)) "$CABEZERA11"
+	printf "${NARANJA} %*s\n" $(((${#CABEZERA12}+100)/2)) "$CABEZERA12"
+	printf "${NARANJA} %*s\n" $(((${#CABEZERA2}+100)/2)) "$CABEZERA2"
+	printf "${NARANJA} %*s\n" $(((${#CABEZERA1}+100)/2)) "$CABEZERA1"
+	echo -e "${NC}"
+	echo ""
+	sleep 3
 	echo "Esta es la configuración de tu usario y Git de tu equipo local:"
 	git config --list
 	echo ""

@@ -15,6 +15,8 @@ CABEZERA9="## Vamos a crear la ssh key para luego ingresarla en el servidor  ##"
 CABEZERA10="##       Github y poder trabajar con nuestros repositorios        ##"
 CABEZERA11="##        Vamos a modificar tu usuario y  tu correo de Git        ##"
 CABEZERA12="##                      de tu equipo local                        ##"
+CABEZERA13="##   Vamos a comparar con el comando diff los cambios que hemos   ##"
+CABEZERA14="##       hecho en local y todavía no se han subido a Github       ##"
 AZUL='\e[0;34m'
 NARANJA='\e[0;33m'
 NC='\e[0m'
@@ -206,6 +208,35 @@ function obtenerClone
 	fi
 }
 
+## Comparar el repositorio local con el alojado en servidor y ver las diferencias
+function verdiff
+{
+	echo ""
+	echo ""
+	printf "${NARANJA} %*s\n" $(((${#CABEZERA1}+100)/2)) "$CABEZERA1"
+	printf "${NARANJA} %*s\n" $(((${#CABEZERA2}+100)/2)) "$CABEZERA2"
+	printf "${NARANJA} %*s\n" $(((${#CABEZERA13}+100)/2)) "$CABEZERA13"
+	printf "${NARANJA} %*s\n" $(((${#CABEZERA14}+102)/2)) "$CABEZERA14"
+	printf "${NARANJA} %*s\n" $(((${#CABEZERA2}+100)/2)) "$CABEZERA2"
+	printf "${NARANJA} %*s\n" $(((${#CABEZERA1}+100)/2)) "$CABEZERA1"
+	echo -e "${NC}"
+	echo ""
+	sleep 3
+	echo "Estos son tus repositorios locales:"
+	cd $HOME/Repos && ls -d */ | sed 's/.$//'
+	echo ""
+	echo "Escribe el nombre del repositorio que quieres comparar: "
+	read diffrepo
+	if [ ! -x $HOME/Repos/$diffrepo ];then
+		echo "Este nombre de repositorio no existe en tu carpeta local"
+		sleep 3 && clear
+	else
+		cd $HOME/Repos/$diffrepo
+		git diff
+		clear
+	fi
+}
+
 ## Obtener key ssh e insertarla en el servidor Github
 function obtenerkey
 {
@@ -329,8 +360,9 @@ do
 	echo 2- Crear nuevo trabajo de repositorio en local y subir a servidor Github
 	echo 3- Subir archivos o modificaciones de local a servidor Github
 	echo 4- Obtener una copia de un repositorio existente en Github y no en tu equipo
-	echo 5- Obtener key \ssh e insertarla en el servidor Github
-	echo 6- Modificar usuario y correo de Git \(equipo local\)
+	echo 5- Comparar el repositorio local con el alojado en servidor y ver las diferencias
+	echo 6- Obtener key \ssh e insertarla en el servidor Github
+	echo 7- Modificar usuario y correo de Git \(equipo local\)
 	echo 0- Salir
 	echo
 	read -p "Selecciona una opción: " opt
@@ -344,8 +376,10 @@ do
 	elif [ "$opt" = "4" ]; then
 		obtenerClone
 	elif [ "$opt" = "5" ]; then
-		obtenerkey
+		verdiff
 	elif [ "$opt" = "6" ]; then
+		obtenerkey
+	elif [ "$opt" = "7" ]; then
 		modusuario
 	elif [ "$opt" = "0" ]; then
 		break

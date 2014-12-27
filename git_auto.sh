@@ -157,23 +157,24 @@ function subirPush
 	echo -e "${NC}"
 	echo ""
 	sleep 3
-	echo "Este es un listado de tus repositorios en local:"
-	cd $HOME/Repos && ls -d */ | sed 's/.$//'
-	echo ""
-	echo "Escribe el nombre del repositorio al que quieres añadir trabajos realizados: "
-	read repoPush
-	if [ ! -x $HOME/Repos/$repoPush ];then
-		echo "Este nombre de repositorio no existe en tu carpeta local"
-		sleep 3 && clear
-	else
-		cd $HOME/Repos/$repoPush
-		echo "Escribe una breve descripción de los cambios: "
-		read cambiosPush
-		git add *
-		git commit -am "'$cambiosPush'"
-		git push origin master
-		sleep 3 && clear
-	fi
+	OPTIONS=`cd $HOME/Repos && ls -d */ | sed 's/.$//'`
+	PS3="Escoge un repositorio por el número que le corresponde: "
+	select repoPush in $OPTIONS; 
+	do
+		if [ -n "$repoPush" ]; then
+			cd $HOME/Repos/$repoPush
+			echo "Escribe una breve descripción de los cambios: "
+			read cambiosPush
+			git add *
+			git commit -am "'$cambiosPush'"
+			git push origin master
+			pause && clear
+		else
+			echo "No has escogido una opción correcta"
+			sleep 3 && clear
+		fi
+		break
+	done
 }
 
 ## Obtener una copia de un repositorio existente en Github y no en tu equipo
@@ -191,21 +192,24 @@ function obtenerClone
 	echo ""
 	sleep 3
 	echo "Este es un listado de tus repositorios en el servidor:"
-	curl https://api.github.com/users/$username/repos -s | grep git_url | cut -d"/" -f5 | sed 's/......$//'
+	OPTIONS=`curl https://api.github.com/users/$username/repos -s | grep git_url | cut -d"/" -f5 | sed 's/......$//'`
 	echo ""
-	echo "Escribe el nombre del repositorio que quieres clonar de tu cuenta: "
-	read repoClone
-	if [ ! -x $HOME/Repos/$repoClone ];then
-		mkdir -p $HOME/Repos/$repoClone
-		cd $HOME/Repos/$repoClone
-		git init
-		git remote add origin git@github.com:$username/$repoClone.git
-		git pull origin master
-		sleep 3 && clear
-	else
-		echo "Este repositorio ya existe en tu carpeta local"
-		sleep 3 && clear
-	fi
+	PS3="Escoge un repositorio por el número que le corresponde: "
+	select repoClone in $OPTIONS;
+	do
+		if [ -x "$repoClone" ]; then
+			mkdir -p $HOME/Repos/$repoClone
+			cd $HOME/Repos/$repoClone
+			git init
+			git remote add origin git@github.com:$username/$repoClone.git
+			git pull origin master
+			sleep 3 && clear
+		else
+			echo "Este repositorio ya existe en tu carpeta local"
+			sleep 3 && clear
+		fi
+		break
+	done
 }
 
 ## Comparar el repositorio local con el alojado en servidor y ver las diferencias
@@ -223,18 +227,18 @@ function verdiff
 	echo ""
 	sleep 3
 	echo "Estos son tus repositorios locales:"
-	cd $HOME/Repos && ls -d */ | sed 's/.$//'
+	OPTIONS=`cd $HOME/Repos && ls -d */ | sed 's/.$//'`
 	echo ""
-	echo "Escribe el nombre del repositorio que quieres comparar: "
-	read diffrepo
-	if [ ! -x $HOME/Repos/$diffrepo ];then
-		echo "Este nombre de repositorio no existe en tu carpeta local"
-		sleep 3 && clear
-	else
-		cd $HOME/Repos/$diffrepo
-		git diff
-		clear
-	fi
+	PS3="Escoge un repositorio por el número que le corresponde: "
+	select diffrepo in $OPTIONS;
+	do
+		if [ -n "$diffrepo" ]; then
+			cd $HOME/Repos/$diffrepo
+			git diff
+			pause && clear
+		fi
+		break
+	done
 }
 
 ## Obtener key ssh e insertarla en el servidor Github
